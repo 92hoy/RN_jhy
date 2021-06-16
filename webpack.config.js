@@ -1,11 +1,11 @@
-const path = require('path')
-const HTMLWebpackPlugin = require('html-webpack-plugin')
+const path = require('path');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
 
 const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   template: path.resolve(__dirname, './public/index.html'),
   filename: 'index.html',
   inject: 'body',
-})
+});
 
 module.exports = {
   entry: path.join(__dirname, 'index.web.js'),
@@ -21,17 +21,22 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
+            presets: ['@babel/preset-react'],
           },
         },
       },
     ],
   },
+  resolve: {
+    alias: {
+      'react-native$': 'react-native-web',
+    },
+  },
   plugins: [HTMLWebpackPluginConfig],
   devServer: {
-  	open: true,
+    open: true,
     historyApiFallback: true,
     contentBase: './',
     hot: true,
   },
-}
+};
