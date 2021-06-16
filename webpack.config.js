@@ -1,5 +1,6 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   template: path.resolve(__dirname, './public/index.html'),
@@ -13,26 +14,50 @@ module.exports = {
     filename: 'bundle.js',
     path: path.join(__dirname, '/build'),
   },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules\/(?!()\/).*/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-react'],
-          },
-        },
-      },
-    ],
-  },
   resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.json'],
     alias: {
       'react-native$': 'react-native-web',
     },
   },
-  plugins: [HTMLWebpackPluginConfig],
+  module: {
+    rules: [
+      {
+        test: /\.(t|j)sx?$/,
+        exclude: /node_modules\/(?!()\/).*/,
+        use: {
+          loader: 'babel-loader',
+        },
+      },
+    ],
+  },
+  // module: {
+  //   rules: [
+  //     {
+  //       test: /\.js$/,
+  //       exclude: /node_modules\/(?!()\/).*/,
+  //       use: {
+  //         loader: 'babel-loader',
+  //         options: {
+  //           presets: ['@babel/preset-react'],
+  //         },
+  //       },
+  //     },
+  //   ],
+  // },
+  // resolve: {
+  //   alias: {
+  //     'react-native$': 'react-native-web',
+  //   },
+  // },
+  plugins: [HTMLWebpackPluginConfig, new ForkTsCheckerWebpackPlugin()],
+  devServer: {
+    host: '0.0.0.0',
+    open: true,
+    historyApiFallback: true,
+    contentBase: './',
+    hot: true,
+  },
   devServer: {
     open: true,
     historyApiFallback: true,
